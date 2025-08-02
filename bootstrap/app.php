@@ -1,8 +1,11 @@
 <?php
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -15,5 +18,20 @@ return Application::configure(basePath: dirname(__DIR__))
         //
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        // Handle ModelNotFoundException
+        Log::info('Custom ModelNotFoundException handler triggered:');
+        $exceptions->render(function (ModelNotFoundException $e, $request) {
+            return response()->json([
+                'message' => 'Resource not found'
+            ], 404);
+        });            
+        $exceptions->render(function (NotFoundHttpException $e, $request) {
+            if ($e->getPrevious() instanceof ModelNotFoundException) {
+                \Log::info('Wrapped NotFoundHttpException triggered from ModelNotFoundException');
+                return response()->json([
+                    'message' => 'Resource not found'
+                ], 404);
+            }
+        });
+                
     })->create();
