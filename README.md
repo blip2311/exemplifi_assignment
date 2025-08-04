@@ -110,7 +110,16 @@ php artisan migrate
 php artisan serve
 ```
 
+
 The application will be available at the URL shown in your terminal (default: http://localhost:8000).
+
+## React UI Integration
+
+The React UI has been compiled and integrated into the source code of this Laravel application. Simply visiting the URL where this application is being served in your browser will open up the user interface.
+
+If you want to view or check the changes made to the React UI source code, you can visit the repository:
+
+https://github.com/blip2311/exemplifi_react_ui
 
 ---
 
